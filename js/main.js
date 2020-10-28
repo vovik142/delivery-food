@@ -1,4 +1,5 @@
 'use strict';
+import Swiper from 'https://unpkg.com/swiper/swiper-bundle.esm.browser.min.js';
 
 const cartButton = document.querySelector("#cart-button");
 const modal = document.querySelector(".modal");
@@ -22,6 +23,11 @@ console.log('loginInput');
 
 let login = localStorage.getItem('gloDelivery');
 
+function validName (str) {
+  const regName = /^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/;
+  return regName.test(str);
+}
+console.log(validName('054Vova'))
 function toggleModal() {
   modal.classList.toggle("is-open");
 }
@@ -72,7 +78,7 @@ function notAuthorized(){
 
   function logIn(event) {
     event.preventDefault();
-    if (loginInput.value.trim()){
+    if (validName(loginInput.value)){
     login = loginInput.value;
     localStorage.setItem('gloDelivery', login)
     toggleModalAuth();
@@ -178,7 +184,9 @@ function createCardGood(){
 
 function openGoods(event){
   const target = event.target;
-  const restaurant = target.closest('.cards-restaurants');
+
+  if(login){
+    const restaurant = target.closest('.cards-restaurants');
   // console.log('restaurant:', restaurant)
   if(restaurant){
     cardsMenu.textContent = '';
@@ -189,15 +197,15 @@ function openGoods(event){
     createCardGood();
     createCardGood();
   }
-
-  openModal()
-}
-
-function openModal(){
-  if(notAuthorized){
-    modalAuth.classList.add("is-open");
+  }else {
+    toggleModalAuth()
   }
+  
+
+  
 }
+
+
  
 cartButton.addEventListener("click", toggleModal);
 
@@ -217,3 +225,24 @@ logo.addEventListener('click', function(){
 );
 
 checkAuth();
+
+
+
+//Slider
+
+
+new Swiper('.swiper-container', {
+  sliderPerView: 1,
+  loop: true,
+  autoplay: true,
+  effect: 'coverflow',
+  
+ 
+  
+  scrollbar: {
+    el: '.swiper-scrollbar',
+    draggable: true,
+  },
+
+
+})
